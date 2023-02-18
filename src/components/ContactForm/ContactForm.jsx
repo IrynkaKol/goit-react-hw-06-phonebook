@@ -1,17 +1,27 @@
 import React from 'react';
 import { Formik, ErrorMessage } from 'formik';
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 import { FormStyled, Label, Input, Button } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactSlice';
+import { getContacts } from 'redux/selector';
+import Notiflix from 'notiflix';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const schema = yup.object().shape({
     name: yup.string().required(),
     number: yup.string().min(6).max(16).required(),
   });
 
+  const dispatch = useDispatch();
+  const allContacts = useSelector(getContacts);
+
   const handleSubmit = (contact, { resetForm }) => {
-    onSubmit(contact);
+    if (allContacts.some(item => item.name === contact.name)) {
+      Notiflix.Notify.info(`Contact ${contact.name} already exist`);
+      return;
+    }
+    dispatch(addContact(contact));
     resetForm();
   };
 
@@ -39,7 +49,3 @@ const ContactForm = ({ onSubmit }) => {
 };
 
 export default ContactForm;
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};

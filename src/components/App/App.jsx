@@ -1,76 +1,22 @@
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
 import { Container } from './App.styled';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
 import Section from '../Section/Section';
 
-
 export function App() {
-  const [contacts, setContacts] = useState(
-    () => JSON.parse(localStorage.getItem('contacts')) ?? []
-  );
-  const [filter, setFilter] = useState('');
-
-  const formSubmitHandler = ({ name, number }) => {
-    if (
-      !contacts.find(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
-      )
-    ) {
-      setContacts(prevState => [{ id: nanoid(), name, number }, ...prevState]);
-    } else {
-      alert(`${name} is already in contacts.`);
-    }
-  };
-
-  const changeFilter = e => {
-    setFilter(e.currentTarget.value);
-  };
-
-  const deleteContacts = contactId => {
-    setContacts(prevState =>
-      prevState.filter(contact => contact.id !== contactId)
-    );
-  };
-
-  useEffect(() => {
-    const contacts = localStorage.getItem('contacts');
-    const parseContacts = JSON.parse(contacts);
-    if (parseContacts) {
-      setContacts(parseContacts);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const getVisibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  const visibleContacts = getVisibleContacts();
   return (
     <Container>
       <Section title="Phonebook">
-        <ContactForm onSubmit={formSubmitHandler} />
+        <ContactForm />
       </Section>
       <Section title="Contacts">
-        <Filter value={filter} onChange={changeFilter} />
-        <ContactList
-          contacts={visibleContacts}
-          onDeleteContacts={deleteContacts}
-        />
+        <Filter />
+        <ContactList />
       </Section>
     </Container>
   );
 }
-
 
 /*
 export class OldApp extends Component {

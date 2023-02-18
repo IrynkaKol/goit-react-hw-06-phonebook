@@ -11,7 +11,7 @@ export const Label = styled.label`
   flex-direction: column;
   gap: 10px;
   justify-content: center;
-align-items: center;
+  align-items: center;
 `;
 export const Input = styled(Field)`
   width: 100%;
@@ -38,6 +38,7 @@ export const Button = styled.button`
   background-color: white;
   color: black;
   border: 2px solid #4caf50;
+  
   &:hover, &:focus {
     background-color: #008CBA;
     color: white;
